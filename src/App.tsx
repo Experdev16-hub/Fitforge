@@ -1,7 +1,8 @@
-import {  FaBehance, FaInstagram, FaLinkedin, FaSpinner, FaTiktok, FaTimes, FaUserTimes, FaWeight, FaYoutube } from "react-icons/fa"
+import { FaBars, FaBehance, FaInstagram, FaLinkedin, FaSpinner, FaTiktok, FaTimes, FaUserTimes, FaWeight, FaYoutube } from "react-icons/fa"
 import { FaMessage } from "react-icons/fa6"
-import { ErrorMessage, Field, Form, Formik } from "formik"
-import * as Yup from 'yup'
+import Seo from "./components/helmet"
+import FormComp from "./components/form"
+import { useState } from "react"
 
 
 const navLinks = [
@@ -12,55 +13,63 @@ const navLinks = [
   {name: "Book Online", link: "bookonline"}
 ]
 
-const validationSchema = Yup.object({
-  firstname: Yup.string().required('Required'),
-  lastname: Yup.string().required('Required'),
-  phoneno: Yup.number().required('Required'),
-  email: Yup.string().email('Invalid email format').required('Required'),
-  message: Yup.string().min(15, 'Must be at least 15 characters').required('Required'),
-});
-const initialValues = {
-  firstname: '',
-  lastname: '',
-  phoneno: '',
-  email: '', 
-  message: '' ,
-};
-const onSubmit = (values: any) => {
-  console.log('submitted', values)
-}
+
 const App = () => {
+  
+  const [ isOpen, setIsOpen ] = useState(false);
+  const toggleMenu = () => setIsOpen(!isOpen)
   return (
     <div className={`bg-black p-0 m-0 scroll-smooth text-white`}>
-      <section id="home" className={`px-40 bg-cover bg-center bg-[url('/images/bg_image_hero_section.jpg')] pt-4 pb-16`}>
-        <header className={`flex justify-between`}>
+      <Seo />
+      <section id="home" className={`lg:px-40 md:px-32 sm:px-28 px-16 bg-cover bg-center bg-[url('/images/bg_image_hero_section.jpg')] pt-4 lg:pb-16 pb-12`}>
+        <header className={`flex justify-between items-center`}>
           <div className={`flex text-2xl font-bold `}>
             <p>Fit</p>
             <p className={`text-red-600`}>Forge</p>
           </div>
-          <nav className={`space-x-12`}>
+          <nav className={`lg:hidden block `}>
+            <button 
+            onClick={toggleMenu}
+            className={`text-red-700 z-10`}>
+                {isOpen ? <FaTimes size={30}/> : <FaBars size={30}/>}
+            </button>
+          </nav>
+          {
+            isOpen && (
+            <nav className={`text-center lg:hidden block transition-all duration-300 absolute bg-red-700 p-7 rounded-lg shadow-lg w-64 h-screen top-9 right-0 mt-2 z-40`}> 
+              <ul className={`flex flex-col gap-12`}>
+                {navLinks.map((navLink) => {
+                  return (
+                    <li key={navLink.name} ><a href={`#${navLink.link}`}>{navLink.name}</a></li>
+                  )
+                })}
+              </ul>
+            </nav>
+            )
+          }
+          <nav className={`space-x-12 hidden lg:block`}>
             {navLinks.map((navLink) => {
               return (
-                <a key={navLink.name} href={`#${navLink.link}`}>{navLink.name}</a>
+                <a key={navLink.name} href={`#${navLink.link}`} className={`hover:text-red-500`}>{navLink.name}</a>
               )
             })}
           </nav>
         </header>
-        <div className={`mt-44 ml-36`}>
-          <h1 className={`text-6xl font-medium`}>Transform Your Life,</h1>
-          <h1 className={`text-6xl font-medium pb-3`}>One Step at a Time</h1>
-          <p>Each time you tain you build yourself - stronger muscles, sharper focus</p>
-          <p className={`pb-9`}>and an unshakable mindset that carries over into every part of your life</p>
-          <a href={`#contactus`} className={`bg-red-600 border-2 border-gray-400 rounded-md px-4 py-2 font-bold text-md`}>
+        <div className={`lg:mt-44 lg:ml-36 md:mt-28 md:ml-20 mt-12 ml-8`}>
+          <h1 className={`lg:text-6xl md:font-medium md:text-5xl sm:text-4xl text-3xl font-normal`}>Transform Your Life,</h1>
+          <h1 className={`lg:text-6xl md:font-medium md:text-5xl sm:text-4xl text-3xl font-normal pb-3`}>One Step at a Time</h1>
+          <p>Each time you tain you build yourself - stronger muscles and sharper focus</p>
+          <p className={`pb-9`}>An unshakable mindset that carries over into every part of your life</p>
+          <a href={`#contactus`} className={`bg-red-600 border-2 border-gray-400 rounded-md md:px-4 md:py-2 py-1 px-2 font-bold text-md`}>
             Book Your Coach
           </a>
         </div>
       </section>
-      <section className={` px-40 pt-16 pb-16 relative overflow-hidden`}>
+      <section className={`lg:px-40 md:px-32 sm:px-28 px-16 lg:pt-16 lg:pb-16 pt-10 pb-2 relative lg:overflow-hidden`}>
         <div className={`absolute inset-0 flex justify-center items-center z-0`}>
             <div className={`w-[1000px] h-[600px] bg-white opacity-10 blur-[120px] rounded-full`}></div>
         </div>
-        <div className={`flex gap-16 h-96 relative z-10`}>
+        <div className={`flex lg:flex-row flex-col lg:gap-16 gap-12 h-96 sm:h-[1200px] lg:h-96 relative z-10`}>
           <div className=" border-2 border-gray-400 h-full rounded-xl p-5 flex items-center flex-col justify-center bg-cover bg-center bg-[url('/images/card1.jpg')]">
             <h1 className={`text-red-600 font-bold text-9xl`}>01</h1>
             <p>Lorem ipsum dolor siit amet consectual elementum partur amit datum amait et amet consectuL</p>
@@ -75,11 +84,11 @@ const App = () => {
           </div>
         </div>
       </section>
-      <section id="whychooseus" className={`px-40 pt-16 pb-16 flex relative overflow-hidden`}>
+      <section id="whychooseus" className={`lg:px-40 md:px-32 sm:px-28 px-16 lg:pt-16 lg:pb-16 pt-10 pb-5 flex relative lg:overflow-hidden`}>
         <div className={`absolute inset-0 flex justify-center items-center z-0`}>
           <div className={`w-[1000px] h-[800px] bg-white opacity-10 blur-[120px] rounded-full`}></div>
         </div>
-        <div className={`flex justify-between items-center gap-4`}>
+        <div className={`flex flex-col-reverse lg:flex-row justify-between items-center gap-12 md:gap-0 mt-[450px] lg:mt-0`}>
           <div className="flex-4/7">
             <h1 className={`font-bold text-5xl text-red-700`}>Be You Just Stronger!</h1>
             <h1 className={`font-bold text-5xl text-red-700`}>Power is in you</h1>
@@ -128,7 +137,7 @@ const App = () => {
               </div>
             </div>
             <div className={`px-12 pt-7`}>
-              <a href={`#contactus`} className={`relative z-10 border-2 border-red-400 rounded-md px-8 py-2 font-bold text-md`}>
+              <a href={`#contactus`} className={`relative z-10 object-cover border-2 border-red-400 rounded-md px-8 py-2 font-bold text-md`}>
                 Join Now
               </a>
             </div>
@@ -138,13 +147,13 @@ const App = () => {
           </div>
         </div>
       </section>
-      <section id="aboutus" className={`px-40 pt-16 pb-16 flex relative overflow-hidden`}>
+      <section id="aboutus" className={`lg:px-40 md:px-32 sm:px-28 px-16 lg:pt-16 lg:pb-16 pt-2 pb-2 flex relative overflow-hidden`}>
         <div className={`absolute inset-0 flex justify-center items-center z-0`}>
           <div className={`w-[1000px] h-[800px] bg-white opacity-10 blur-[120px] rounded-full`}></div>
         </div>
-        <div className={`flex justify-between items-center gap-16`}>
+        <div className={`flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-16`}>
           <div className="h-[550px] flex-3/7 border-gray-400 border-2 rounded-xl">
-            <img src="/images/card1.jpg" alt="card1"  className={`h-full w-full rounded-xl`}/>
+            <img src="/images/card1.jpg" alt="card1"  className={`h-full w-full rounded-xl object-cover`}/>
           </div>
           <div className="flex-4/7">
             <h1 className={`font-bold text-5xl text-red-700`}>We don't just dream it, We work for it</h1>
@@ -169,17 +178,17 @@ const App = () => {
           </div>
         </div>
       </section>
-      <section id="contactus" className={`px-40 pt-16 pb-16 flex relative overflow-hidden`}>
+      <section id="contactus" className={`lg:px-40 md:px-32 sm:px-28 px-16 lg:pt-16 lg:pb-16 pt-2 pb-10 flex relative overflow-hidden`}>
         <div className={`absolute inset-0 flex justify-center items-center z-0`}>
           <div className={`w-[1000px] h-[600px] bg-white opacity-10 blur-[120px] rounded-full`}></div>
         </div>
-        <div className={`flex items-center gap-7 justify-between`}>
+        <div className={`flex flex-col lg:flex-row items-center gap-12 lg:gap-7 justify-between`}>
             <div className={``}>
               <h1 className={`font-bold text-5xl text-red-700`}>Let's plan your next routine together</h1>
               <p className={`pt-4`}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utlabore
               </p>
-              <div className={` flex gap-3 text-red-700 my-10`}>
+              <div className={`flex-1/5 flex gap-3 text-red-700 my-10`}>
                 <FaMessage size={25} />
                 <p className={`text-white`}>Email us: yourname@gmail.com</p>
               </div>
@@ -192,55 +201,9 @@ const App = () => {
                 <FaTiktok size={20} color="white"/>
               </div>
             </div>
-            <div className={`border-3 rounded-xl border-gray-500 p-5`}>
+            <div className={`flex-4/5 border-3 rounded-xl border-gray-500 p-5 `}>
               <h3 className={`font-bold text-3xl text-red-700`}>Get in touch</h3>
-              <Formik 
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={onSubmit}>
-                <Form>
-                  <div className={`flex gap-5 pt-3`}>
-                    <div className={`flex-1/2 flex flex-col`}>
-                      <label htmlFor="firstname" className={`text-red-700`}>FirstName</label>
-                      <Field className={`relative z-10 border-2 border-red-700 p-1 rounded-sm`} type='text' id='firstname' name='firstname' />
-                      <ErrorMessage name="firstname" >
-                        {errorMsg => <div className="text-red-500 text-xs">{errorMsg}</div> }
-                      </ErrorMessage>
-                    </div>
-                    <div className={`flex-1/2 flex flex-col`}>
-                      <label htmlFor="lastname" className={`text-red-700`}>LastName</label>
-                      <Field className={`relative z-10 border-2 border-red-700 p-1 rounded-sm`} type='text' id='lastname' name='lastname' />
-                      <ErrorMessage name="lastname" >
-                        {errorMsg => <div className="text-red-500 text-xs">{errorMsg}</div> }
-                      </ErrorMessage>
-                    </div>
-                  </div>
-                  <div className={`flex gap-5 pt-3`}>
-                    <div className={`flex-1/2 flex flex-col`}>
-                      <label htmlFor="email" className={`text-red-700`}>Email</label>
-                      <Field className={`relative z-10 border-2 border-red-700 p-1 rounded-sm`} type='text' id='email' name='email' />
-                      <ErrorMessage name="email" >
-                        {errorMsg => <div className="text-red-500 text-xs">{errorMsg}</div> }
-                      </ErrorMessage>
-                    </div>
-                    <div className={`flex-1/2 flex flex-col`}>
-                      <label htmlFor="phoneno" className={`text-red-700`}>Phone no.</label>
-                      <Field className={`relative z-10 border-2 border-red-700 p-1 rounded-sm`} type='text' id='phoneno' name='phoneno' />
-                      <ErrorMessage name="phoneno">
-                        {errorMsg => <div className="text-red-500 text-xs">{errorMsg}</div> }
-                      </ErrorMessage>
-                    </div>
-                  </div>
-                  <div className={`flex-1/2 flex flex-col`}>
-                    <label htmlFor="meassage" className={`text-red-700`}>Message</label>
-                    <Field className={`relative z-10 border-2 border-red-700 p-1 rounded-sm text-white`} as='textarea' rows='4' id='message' name='message' />
-                    <ErrorMessage name="message" >
-                        {errorMsg => <div className="text-red-500 text-xs">{errorMsg}</div> }
-                    </ErrorMessage>
-                  </div>
-                  <button className="mt-5 relative z-10 bg-red-600 border-2 border-gray-400 rounded-md px-7 py-1 font-bold text-md">Submit</button>
-                </Form>
-              </Formik>
+              <FormComp />
             </div>
         </div>
       </section>
